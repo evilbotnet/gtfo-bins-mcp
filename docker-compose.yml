@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  gtfobins-mcp:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: gtfobins-mcp-server
+    ports:
+      - "8080:8080"
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    volumes:
+      # Optional: mount a volume to persist the cloned repository
+      - gtfobins-data:/app/gtfobins-data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.socket().connect(('localhost', 8080))"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  gtfobins-data:
