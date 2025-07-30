@@ -24,5 +24,11 @@ COPY server.py .
 # Set unbuffered Python output
 ENV PYTHONUNBUFFERED=1
 
+#Create logs dir with proper permissions
+RUN mkdir -p /app/logs && chmod 755 /app/logs
+
+#Mountable volume for logs
+VOLUME /app/logs
+
 # Default command for MCP server
 CMD ["python", "/app/server.py"]

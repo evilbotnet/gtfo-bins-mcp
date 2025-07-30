@@ -20,7 +20,8 @@ from pydantic import AnyUrl
 import mcp.server.stdio
 
 # Set up logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(filename='/app/logs/gtfobins.log',level=logging.INFO, 
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 class GTFOBinsServer:
