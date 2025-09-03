@@ -1,5 +1,10 @@
-# Use Python slim image for Apple Silicon
-FROM --platform=linux/arm64 python:3.11-slim
+# Use Python slim image for Apple Silicon or Apple Intel - whichever your platform supports
+# Docker will automatically detect your systems architecture
+FROM python:3.11-slim
+
+# Show platform 
+ARG TARGETPLATFORM
+RUN echo "Building for: ${TARGETPLATFORM}"
 
 # Set working directory
 WORKDIR /app
