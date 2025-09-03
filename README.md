@@ -20,7 +20,7 @@ A Model Context Protocol (MCP) server that provides seamless access to the GTFOB
 - **Educational**: Learn about Unix security and privilege escalation vectors
 - **CTF Competitions**: Fast reference for challenge solving
 
-### 👩🏻‍🔧 Changes in This Version
+## 👩🏻‍🔧 Changes in This Version
 - **Architecture-Agnostic Builds**: The `Dockerfile` no longer specifies a platform (e.g., `linux/arm64`), allowing builds on any architecture (x86_64, ARM64, etc.).
 - **Multiprocessing**: Added multiprocessing to `server.py` for faster loading of GTFOBins data, with a fallback to sequential processing if needed.
 - **Logging**: Added logging to `/app/logs/gtfobins.log` for server events and errors.
