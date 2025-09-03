@@ -10,7 +10,6 @@ A Model Context Protocol (MCP) server that provides seamless access to the GTFOB
 - 📋 **Function Filtering**: List binaries by specific capabilities (shell, file-upload, SUID, etc.)
 - 📖 **Detailed Information**: Get complete exploitation techniques with code examples
 - 🐳 **Dockerized**: Clean, isolated deployment with minimal dependencies
-- 🍎 **Apple Silicon Optimized**: Native ARM64 support for M1/M2/M3 Macs
 - 🚀 **On-Demand**: No persistent containers - runs fresh for each session
 
 ## 🎯 Use Cases
@@ -20,6 +19,14 @@ A Model Context Protocol (MCP) server that provides seamless access to the GTFOB
 - **Blue Team Defense**: Understand what attackers can do with common binaries
 - **Educational**: Learn about Unix security and privilege escalation vectors
 - **CTF Competitions**: Fast reference for challenge solving
+
+### 👩🏻‍🔧 Changes in This Version
+- **Architecture-Agnostic Builds**: The `Dockerfile` no longer specifies a platform (e.g., `linux/arm64`), allowing builds on any architecture (x86_64, ARM64, etc.).
+- **Multiprocessing**: Added multiprocessing to `server.py` for faster loading of GTFOBins data, with a fallback to sequential processing if needed.
+- **Logging**: Added logging to `/app/logs/gtfobins.log` for server events and errors.
+- **Error Handling**: Improved application-level error handling in `server.py` for better reliability.
+- **Testing**: Added `test_malformed.sh` to run test cases against the server.
+- **MCP Inspector**: Added support for debugging with MCP Inspector.
 
 ## 🚀 Quick Start
 
@@ -45,11 +52,11 @@ cd gtfobins-mcp-server
 ### 2. Build Docker Image
 
 ```bash
-# Build the image for Apple Silicon
-docker build --platform linux/arm64 -t gtfobins-mcp-server .
+# Build the image
+docker build -t gtfobins-mcp-server .
 
 # Test the build
-docker run --rm --platform linux/arm64 gtfobins-mcp-server python -c "
+docker run --rm gtfobins-mcp-server python -c "
 import sys; sys.path.append('/app')
 from server import GTFOBinsServer
 server = GTFOBinsServer()
@@ -70,10 +77,8 @@ Edit your Claude Desktop configuration file:
       "command": "docker",
       "args": [
         "run",
-        "--rm",
+	      "--rm",
         "-i",
-        "--platform",
-        "linux/arm64",
         "gtfobins-mcp-server",
         "python",
         "/app/server.py"
@@ -82,6 +87,7 @@ Edit your Claude Desktop configuration file:
     }
   }
 }
+
 ```
 
 ### 4. Restart Claude Desktop
@@ -113,6 +119,49 @@ Once configured, you can interact with GTFOBins directly through Claude Desktop:
 "What are all the capabilities-based attacks for systemctl?"
 ```
 
+## 🐛 Testing and Debugging
+
+### Test Script
+The test script `test_malformed.sh` defines a function that allows specific test cases to be sent to the GTFOBins MCP Server via STDIO. The function handles the required initialization of the MCP conversation before sending the test request to the server. These requests and responses are captured and logged to `test_cases.txt` for further analysis. There are currently **31** test cases that cover general tool validation, resource validation, invalid tool parameters, and more!
+
+### Debugging with MCP Inspector
+The MCP Inspector is an interactive developer tool, and is the fastest way to test and debug any MCP server. To debug the GTFOBins MCP Server using MCP Inspector, follow these steps outlined below:
+
+#### 1. Install Node.js
+```bash
+# Begin by checking if you have Node.js installed
+node -v # If you see a version number, you have it
+
+# If not, install Node.js using Homebrew
+brew install node
+```
+
+#### 2. Ensure the Docker Image is Built
+```bash
+docker inspect gtfobins-mcp-server
+
+# If no image is available, build it:
+docker build -t gtfobins-mcp-server .
+```
+
+#### 3. Run MCP Inspector
+```bash
+# The Inspector runs directly through npx
+npx @modelcontextprotocol/inspector "/usr/local/bin/docker" run -i --quiet gtfobins-mcp-server
+```
+
+From here, a session token will be generated and the MCP Inspector will launch in your browser. Once you connect to the server, you will be able to start interacting with the interface and perform operations such as view avaiable tools, list resources, make specific tool calls, etc. You can see the different requests/responses in the **History** section of the interface. View the `gtfobins.log` file for specific events such as application-level error handling, errors encountered when loading GTFOBins data, server startup errors, etc. 
+
+
+### Utilizing Logs
+Logs are written to /app/logs/gtfobins.log, and can be accessed through `docker exec.` If you wish to access these logs locally, you can mount a local `logs` directory as a volume when running the container:
+
+```bash
+mkdir -p logs
+docker run -it --rm -v $(pwd)/logs:/app/logs gtfobins-server
+
+```
+
 ## 🛠 Available Tools
 
 The MCP server provides three main tools:
@@ -142,6 +191,11 @@ List all binaries that support a specific function type.
 
 **Example**: List all binaries with SUID exploitation techniques
 
+A fourth tool has been added to collect an display specific testing related metrics for the MCP Server:
+
+### 4. `get_server_status`
+Get server status and performance metrics such as CPU percentage, number of requests handled, etc. 
+
 ## 📁 Project Structure
 
 ```
@@ -151,6 +205,8 @@ gtfobins-mcp-server/
 ├── server.py              # Main MCP server implementation
 ├── docker-compose.yml     # Optional: Alternative deployment method
 ├── build.sh              # Automated setup script
+├── test_malformed.sh     # Automated test script to send malformed and valid requests to MCP Server
+├── test_cases.txt        # Output of test cases
 └── README.md             # This documentation
 ```
 
@@ -177,7 +233,7 @@ The MCP server works by:
 - Check that Docker is running: `docker ps`
 
 **Build failures:**
-- Ensure you're on Apple Silicon and using the `--platform linux/arm64` flag
+- Although the `--platform linux/arm64` flag has been removed, you can check the Docker logs or inspect the Docker image to ensure the architecture used to build is as expected
 - Check Docker has sufficient disk space for the image
 
 **MCP connection issues:**
@@ -189,10 +245,10 @@ The MCP server works by:
 
 ```bash
 # Test Docker image
-docker run --rm --platform linux/arm64 gtfobins-mcp-server python --version
+docker run --rm gtfobins-mcp-server python --version
 
 # Test GTFOBins data loading
-docker run --rm --platform linux/arm64 gtfobins-mcp-server python -c "
+docker run --rm gtfobins-mcp-server python -c "
 import sys; sys.path.append('/app')
 from server import GTFOBinsServer
 server = GTFOBinsServer()
